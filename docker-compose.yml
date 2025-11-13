@@ -158,8 +158,33 @@ services:
         condition: service_healthy
     volumes:
       - ./backend/services/chat-service:/app
-      - ./backend/shared:/app/shared
+      - ./backend/services/shared:/app/shared
       - ./ml:/app/ml
+    networks:
+      - cleo_network
+    restart: unless-stopped
+
+  # Savings Service
+  savings-service:
+    build:
+      context: ./backend/services/savings-service
+      dockerfile: Dockerfile
+    container_name: cleo_savings_service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://cleo:cleo_password@postgres:5432/cleo_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - DEBUG=true
+    ports:
+      - "8005:8005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/savings-service:/app
+      - ./backend/shared:/app/shared
     networks:
       - cleo_network
     restart: unless-stopped
