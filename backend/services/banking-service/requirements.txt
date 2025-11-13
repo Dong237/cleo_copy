@@ -1,0 +1,10 @@
+# Banking Service specific dependencies
+
+# Include shared dependencies
+-r ../../shared/requirements.txt
+
+# Plaid integration
+plaid-python==14.0.0
+
+# Additional utilities
+python-dateutil==2.8.2

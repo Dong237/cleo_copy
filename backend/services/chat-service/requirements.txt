@@ -1,0 +1,13 @@
+# Chat Service specific dependencies
+
+# Include shared dependencies
+-r ../../shared/requirements.txt
+
+# OpenAI integration (optional for enhanced AI)
+openai==1.3.0
+
+# Anthropic integration (alternative LLM)
+anthropic==0.7.7
+
+# Additional NLP utilities
+nltk==3.8.1
