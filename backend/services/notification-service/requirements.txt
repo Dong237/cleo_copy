@@ -1,0 +1,16 @@
+# Notification Service specific dependencies
+
+# Include shared dependencies
+-r ../../shared/requirements.txt
+
+# Firebase Admin SDK (for push notifications)
+firebase-admin==6.3.0
+
+# Twilio (for SMS)
+twilio==8.10.0
+
+# SendGrid (for email)
+sendgrid==6.11.0
+
+# Additional utilities
+python-dateutil==2.8.2
