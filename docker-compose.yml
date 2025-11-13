@@ -189,6 +189,87 @@ services:
       - cleo_network
     restart: unless-stopped
 
+  # Notification Service
+  notification-service:
+    build:
+      context: ./backend/services/notification-service
+      dockerfile: Dockerfile
+    container_name: cleo_notification_service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://cleo:cleo_password@postgres:5432/cleo_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - FIREBASE_CREDENTIALS=${FIREBASE_CREDENTIALS}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - SENDGRID_FROM_EMAIL=${SENDGRID_FROM_EMAIL}
+      - DEBUG=true
+    ports:
+      - "8006:8006"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/notification-service:/app
+      - ./backend/shared:/app/shared
+    networks:
+      - cleo_network
+    restart: unless-stopped
+
+  # Advance Service
+  advance-service:
+    build:
+      context: ./backend/services/advance-service
+      dockerfile: Dockerfile
+    container_name: cleo_advance_service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://cleo:cleo_password@postgres:5432/cleo_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - DEBUG=true
+    ports:
+      - "8007:8007"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/advance-service:/app
+      - ./backend/shared:/app/shared
+    networks:
+      - cleo_network
+    restart: unless-stopped
+
+  # Credit Service
+  credit-service:
+    build:
+      context: ./backend/services/credit-service
+      dockerfile: Dockerfile
+    container_name: cleo_credit_service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://cleo:cleo_password@postgres:5432/cleo_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - DEBUG=true
+    ports:
+      - "8008:8008"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/credit-service:/app
+      - ./backend/shared:/app/shared
+    networks:
+      - cleo_network
+    restart: unless-stopped
+
   # API Gateway (Kong)
   kong-database:
     image: postgres:14-alpine

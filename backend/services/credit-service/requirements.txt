@@ -1,0 +1,7 @@
+# Credit Service specific dependencies
+
+# Include shared dependencies
+-r ../../shared/requirements.txt
+
+# Additional utilities
+python-dateutil==2.8.2
