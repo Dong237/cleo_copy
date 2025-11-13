@@ -1,0 +1,115 @@
+# Kong API Gateway Configuration
+# This file configures Kong routes and services for all microservices
+
+_format_version: "3.0"
+
+services:
+  # User Service
+  - name: user-service
+    url: http://user-service:8001
+    routes:
+      - name: user-service-route
+        paths:
+          - /api/v1/auth
+          - /api/v1/users
+          - /api/v1/profile
+        strip_path: false
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+    plugins:
+      - name: cors
+        config:
+          origins:
+            - "*"
+          methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+            - PATCH
+          headers:
+            - Accept
+            - Authorization
+            - Content-Type
+          exposed_headers:
+            - X-Auth-Token
+          credentials: true
+          max_age: 3600
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+          policy: local
+
+  # Banking Service
+  - name: banking-service
+    url: http://banking-service:8002
+    routes:
+      - name: banking-service-route
+        paths:
+          - /api/v1/accounts
+          - /api/v1/transactions
+          - /api/v1/plaid
+        strip_path: false
+    plugins:
+      - name: cors
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+
+  # Budget Service
+  - name: budget-service
+    url: http://budget-service:8003
+    routes:
+      - name: budget-service-route
+        paths:
+          - /api/v1/budgets
+          - /api/v1/spending
+        strip_path: false
+    plugins:
+      - name: cors
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+
+  # Chat Service
+  - name: chat-service
+    url: http://chat-service:8004
+    routes:
+      - name: chat-service-route
+        paths:
+          - /api/v1/chat
+          - /api/v1/conversations
+        strip_path: false
+    plugins:
+      - name: cors
+      - name: rate-limiting
+        config:
+          minute: 50  # Lower limit for AI endpoints
+          hour: 500
+
+# Global plugins
+plugins:
+  - name: request-id
+    config:
+      header_name: X-Request-ID
+      echo_downstream: true
+
+  - name: correlation-id
+    config:
+      header_name: X-Correlation-ID
+      echo_downstream: true
+
+  - name: prometheus
+    config:
+      per_consumer: true
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+      upstream_health_metrics: true

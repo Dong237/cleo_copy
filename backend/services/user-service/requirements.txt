@@ -1,0 +1,9 @@
+# User Service specific dependencies
+
+# Include shared dependencies
+-r ../../shared/requirements.txt
+
+# Additional dependencies for user service
+email-validator==2.1.0
+pyotp==2.9.0  # For 2FA
+qrcode==7.4.2  # For 2FA QR codes
