@@ -1,0 +1,11 @@
+# Recommendation Service specific dependencies
+
+# Include shared dependencies
+-r ../../shared/requirements.txt
+
+# ML and data processing
+numpy==1.26.2
+scikit-learn==1.3.2
+
+# Time series
+python-dateutil==2.8.2

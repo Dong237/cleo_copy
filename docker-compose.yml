@@ -270,6 +270,56 @@ services:
       - cleo_network
     restart: unless-stopped
 
+  # Analytics Service
+  analytics-service:
+    build:
+      context: ./backend/services/analytics-service
+      dockerfile: Dockerfile
+    container_name: cleo_analytics_service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://cleo:cleo_password@postgres:5432/cleo_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - DEBUG=true
+    ports:
+      - "8009:8009"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/analytics-service:/app
+      - ./backend/shared:/app/shared
+    networks:
+      - cleo_network
+    restart: unless-stopped
+
+  # Recommendation Service
+  recommendation-service:
+    build:
+      context: ./backend/services/recommendation-service
+      dockerfile: Dockerfile
+    container_name: cleo_recommendation_service
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://cleo:cleo_password@postgres:5432/cleo_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - DEBUG=true
+    ports:
+      - "8010:8010"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/recommendation-service:/app
+      - ./backend/shared:/app/shared
+    networks:
+      - cleo_network
+    restart: unless-stopped
+
   # API Gateway (Kong)
   kong-database:
     image: postgres:14-alpine

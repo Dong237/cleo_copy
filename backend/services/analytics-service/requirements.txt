@@ -1,0 +1,11 @@
+# Analytics Service specific dependencies
+
+# Include shared dependencies
+-r ../../shared/requirements.txt
+
+# Analytics and data processing
+pandas==2.1.4
+numpy==1.26.2
+
+# Time series analysis
+python-dateutil==2.8.2
