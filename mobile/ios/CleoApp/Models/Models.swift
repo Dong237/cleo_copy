@@ -162,6 +162,10 @@ struct EligibilityResponse: Codable {
     }
 }
 
+struct RequestAdvanceRequest: Codable {
+    let amount: Double
+}
+
 // MARK: - Credit Models
 struct CreditScore: Codable {
     let score: Int

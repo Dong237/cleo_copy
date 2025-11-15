@@ -1,123 +1,101 @@
-# Cleo iOS App - Quick Start Guide
+# 🚀 Quick Start Guide
 
-Get the Cleo iOS demo app running in 5 minutes!
+Get the Cleo iOS app running in 3 simple steps!
 
-## TL;DR
+## Prerequisites
 
-```bash
-# 1. Start backend services
-cd /home/user/cleo_copy
-docker-compose up -d
+- macOS 13.0+
+- Xcode 15.0+
+- Docker Desktop (for backend)
 
-# 2. Open Xcode and create new iOS App project
-# - Name: CleoApp
-# - Location: /home/user/cleo_copy/mobile/ios/
-# - Add all existing files from CleoApp/ folder
-
-# 3. Build and Run (Cmd + R)
-# 4. Register test account in app
-# 5. Explore features!
-```
-
-## Detailed Steps
-
-### 1. Start Backend (2 minutes)
+## Step 1: Start Backend Services (2 minutes)
 
 ```bash
 # From project root
+cd /path/to/cleo_copy
 docker-compose up -d
 
-# Verify all 10 services are running
-docker-compose ps
+# Verify services are running
+curl http://127.0.0.1:8001/health
+# Should return: {"status":"healthy"}
 ```
 
-You should see 11 containers (postgres + 10 services on ports 8001-8010).
+## Step 2: Run Setup Script (1 minute)
 
-### 2. Create Xcode Project (2 minutes)
-
-1. **Open Xcode**
-2. **File → New → Project**
-3. **Select "App" template**
-4. **Configure:**
-   - Product Name: `CleoApp`
-   - Interface: `SwiftUI`
-   - Language: `Swift`
-5. **Save to:** `/home/user/cleo_copy/mobile/ios/`
-6. **Delete default files** Xcode created
-7. **Add existing files:**
-   - Right-click CleoApp folder
-   - "Add Files to CleoApp..."
-   - Select all folders (Config, Models, Services, ViewModels, Views, Utils)
-   - Uncheck "Copy items if needed"
-   - Add
-
-### 3. Run App (30 seconds)
-
-1. **Select iPhone 15 Pro simulator**
-2. **Press Cmd + R**
-3. **Wait for build and simulator launch**
-
-### 4. Test Features (1 minute)
-
-1. **Register account:**
-   - Name: Test User
-   - Email: test@example.com
-   - Password: password123
-
-2. **Explore tabs:**
-   - Dashboard - See financial overview
-   - Chat - Talk to Cleo with different personalities
-   - Budget - Create and track budgets
-   - Savings - Set savings goals
-   - Profile - View account info
-
-## Common Issues
-
-### Backend not starting?
 ```bash
-docker-compose down
-docker-compose up -d --build
+cd mobile/ios
+./setup.sh
 ```
 
-### Can't connect to backend?
-- Check `APIConfig.swift` uses `127.0.0.1` (not `localhost`)
-- Verify Info.plist allows local networking
-- Restart simulator
+## Step 3: Launch the App (1 minute)
 
-### Build errors?
-- Make sure all files are added to Xcode target
-- Check deployment target is iOS 16.0+
-- Clean build folder (Cmd + Shift + K)
+**Option A: Using run script (easiest)**
+```bash
+./run.sh
+```
 
-## What's Included
+**Option B: Using Xcode**
+```bash
+open CleoApp.xcodeproj
+# Then press Cmd+R to build and run
+```
 
-✅ **Complete UI**
-- Beautiful gradient authentication
-- 5-tab navigation
-- Dashboard with financial cards
-- AI chat with personality modes
-- Budget management with progress tracking
-- Savings goals with deadlines
-- Profile and settings
+## 🎉 That's it!
 
-✅ **Full Backend Integration**
-- 10 microservices connected
-- JWT authentication
-- Real-time data sync
-- Error handling
+The app should now be running on the iOS Simulator.
 
-✅ **Modern Architecture**
-- SwiftUI declarative UI
-- MVVM pattern
-- Combine reactive programming
-- Type-safe networking
+### First Time Setup
 
-## Next Steps
+1. **Register** a new account:
+   - Email: `test@example.com`
+   - Password: `Password123!`
+   - Name: `Test User`
 
-See [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) for:
-- Detailed setup options
-- Troubleshooting guide
-- Development tips
-- Production deployment
+2. **Explore** the features:
+   - 💰 Dashboard - See your financial overview
+   - 🤖 Chat - Talk to Cleo AI
+   - 📊 Budget - Create your first budget
+   - 🎯 Savings - Set a savings goal
+   - 💵 Advance - Check cash advance eligibility
+   - 📈 Credit - View credit score
 
-Enjoy exploring Cleo! 🎉
+## 📱 Supported Devices
+
+- iPhone 12+
+- iOS 16.0+
+
+## ⚠️ Troubleshooting
+
+**Backend not connecting?**
+```bash
+# Check services
+docker ps
+
+# Restart if needed
+docker-compose restart
+```
+
+**Xcode build errors?**
+```bash
+# Clean build
+rm -rf ~/Library/Developer/Xcode/DerivedData/CleoApp-*
+
+# Rebuild
+./build.sh
+```
+
+**Physical device testing?**
+Update `APIConfig.swift`:
+```swift
+static let baseURL = "http://YOUR_MAC_IP_ADDRESS"
+```
+
+## 📚 More Information
+
+- Full README: [README.md](README.md)
+- Backend README: [../../backend/README.md](../../backend/README.md)
+- API Documentation: http://localhost:8001/docs
+
+---
+
+**Need help?** Open an issue on GitHub!
