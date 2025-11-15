@@ -68,29 +68,88 @@ enum APIError: LocalizedError {
 }
 
 // MARK: - Keychain Helper
+import Security
+
 class KeychainHelper {
     static let shared = KeychainHelper()
 
     private let accessTokenKey = "com.cleo.accessToken"
     private let refreshTokenKey = "com.cleo.refreshToken"
+    private let service = "com.cleoapp.ios"
 
     private init() {}
 
+    // MARK: - Save Tokens
     func saveTokens(accessToken: String, refreshToken: String) {
-        UserDefaults.standard.set(accessToken, forKey: accessTokenKey)
-        UserDefaults.standard.set(refreshToken, forKey: refreshTokenKey)
+        save(key: accessTokenKey, value: accessToken)
+        save(key: refreshTokenKey, value: refreshToken)
     }
 
+    // MARK: - Get Tokens
     func getAccessToken() -> String? {
-        return UserDefaults.standard.string(forKey: accessTokenKey)
+        return get(key: accessTokenKey)
     }
 
     func getRefreshToken() -> String? {
-        return UserDefaults.standard.string(forKey: refreshTokenKey)
+        return get(key: refreshTokenKey)
     }
 
+    // MARK: - Clear Tokens
     func clearTokens() {
-        UserDefaults.standard.removeObject(forKey: accessTokenKey)
-        UserDefaults.standard.removeObject(forKey: refreshTokenKey)
+        delete(key: accessTokenKey)
+        delete(key: refreshTokenKey)
+    }
+
+    // MARK: - Private Keychain Methods
+    private func save(key: String, value: String) {
+        guard let data = value.data(using: .utf8) else { return }
+
+        // Delete any existing item
+        delete(key: key)
+
+        // Create new keychain item
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+            kSecValueData as String: data,
+            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        ]
+
+        let status = SecItemAdd(query as CFDictionary, nil)
+        if status != errSecSuccess {
+            print("Keychain save error: \(status)")
+        }
+    }
+
+    private func get(key: String) -> String? {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+
+        guard status == errSecSuccess,
+              let data = result as? Data,
+              let value = String(data: data, encoding: .utf8) else {
+            return nil
+        }
+
+        return value
+    }
+
+    private func delete(key: String) {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key
+        ]
+
+        SecItemDelete(query as CFDictionary)
     }
 }

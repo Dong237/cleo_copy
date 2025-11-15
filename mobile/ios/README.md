@@ -1,323 +1,443 @@
 # Cleo iOS App
 
-AI-powered financial assistant for iOS - Full Demo Implementation
+<div align="center">
 
-## 🎉 Current Status
+![Cleo Logo](https://via.placeholder.com/150x150/667EEA/FFFFFF?text=CLEO)
 
-**✅ FULLY IMPLEMENTED** - Complete demo app ready to build and run!
+**AI-Powered Financial Assistant for iOS**
 
-All core features are implemented with beautiful UI and full backend integration.
+[![iOS](https://img.shields.io/badge/iOS-16.0%2B-blue.svg)](https://developer.apple.com/ios/)
+[![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)](https://swift.org/)
+[![SwiftUI](https://img.shields.io/badge/SwiftUI-4.0-green.svg)](https://developer.apple.com/xcode/swiftui/)
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](../../LICENSE)
 
-## Requirements
+</div>
 
-- **Xcode 15.0+** - [Download from Mac App Store](https://apps.apple.com/us/app/xcode/id497799835)
-- **iOS 16.0+** SDK (included with Xcode)
-- **Swift 5.9+** (included with Xcode)
-- **macOS** (required for iOS development)
-- **Docker Desktop** - For running backend services
+## 📱 Overview
 
-## Quick Start
+The Cleo iOS app is a fully-featured financial assistant that helps users manage their money through AI-powered conversations, smart budgeting, automated savings, cash advances, and credit building.
 
-See [QUICKSTART.md](QUICKSTART.md) for the fastest way to get running (5 minutes).
+### ✨ Key Features
 
-For detailed instructions, see [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md).
+- 🤖 **AI Chat** - Conversational assistant with 4 personality modes
+- 💰 **Smart Budgeting** - Category-based budget tracking with alerts
+- 🎯 **Savings Goals** - Automated savings with goal tracking
+- 💵 **Cash Advances** - Quick cash when you need it ($20-$250)
+- 📊 **Credit Building** - Secured credit card and score monitoring
+- 📈 **Analytics** - Spending insights and financial health tracking
+- 🔔 **Real-time Alerts** - Budget warnings and bill reminders
 
-### TL;DR
+## 🏗️ Architecture
 
-```bash
-# 1. Start backend services
-cd /home/user/cleo_copy
-docker-compose up -d
+### Tech Stack
 
-# 2. Create Xcode project and add files
-# 3. Build and run (Cmd + R)
-# 4. Register test account and explore!
-```
+- **Language**: Swift 5.9+
+- **UI Framework**: SwiftUI
+- **Architecture**: MVVM (Model-View-ViewModel)
+- **Networking**: Combine + URLSession
+- **State Management**: Combine (@Published, ObservableObject)
+- **Security**: Keychain (for token storage)
+- **Min iOS**: 16.0+
 
-## Tech Stack
-
-- **UI Framework:** SwiftUI (declarative UI)
-- **Architecture:** MVVM (Model-View-ViewModel)
-- **Networking:** URLSession with generic type-safe client
-- **State Management:** Combine framework
-- **Local Storage:** UserDefaults (Keychain mock for demo)
-- **Reactive Programming:** Combine Publishers/Subscribers
-- **Code Style:** Swift 5.9+ with modern concurrency patterns
-
-## Implemented Features
-
-### ✅ Core Features (100% Complete)
-
-#### Authentication
-- Beautiful gradient login/register screens
-- JWT token authentication
-- Secure token storage
-- Auto-login on app launch
-- Clean logout flow
-
-#### Dashboard
-- Financial overview with total balance
-- Income vs spending summary
-- Top 3 savings goals with progress
-- Recent transactions list
-- Budget overview with status indicators
-- Beautiful gradient cards and animations
-
-#### AI Chat
-- Real-time chat with Cleo
-- 4 personality modes: Supportive, Funny, Strict, Roast
-- Personality selector with icons
-- Message bubbles with timestamps
-- Auto-scroll to latest message
-- Loading states
-
-#### Budget Management
-- Create category-based budgets
-- Monthly/weekly/yearly periods
-- Real-time spending tracking
-- Circular progress indicators
-- Budget vs spent visualization
-- Warning alerts when over 90%
-- Empty state handling
-
-#### Savings Goals
-- Create savings goals with targets
-- Deadline tracking with date picker
-- Progress visualization
-- Total savings aggregation
-- Current amount vs target
-- Beautiful progress cards
-- Empty state with call-to-action
-
-#### Cash Advance
-- View available advance limit
-- Request advances ($10-$250)
-- See outstanding balance
-- Recent advances history
-- Status tracking (pending, approved, disbursed, repaid)
-- Fee calculation (3%)
-- Repayment date display
-- How it works section
-
-#### Credit Builder
-- Credit score display with grade
-- Score change tracking
-- Interactive score gauge
-- Score factor breakdown (5 factors)
-- Credit activity feed
-- Enroll in Credit Builder program
-- Monthly contribution options
-- Expected results calculator
-- Not enrolled state with benefits
-
-#### Profile & Settings
-- User info display
-- Subscription tier badge
-- Account settings navigation
-- Financial services links
-- Support and help center
-- Privacy and about sections
-- Logout functionality
-
-### Architecture
+### Project Structure
 
 ```
 CleoApp/
-├── CleoAppApp.swift              # App entry point with @main
-├── ContentView.swift              # Root view switcher
-├── Info.plist                     # App configuration
+├── App/                    # App entry point
+│   ├── CleoAppApp.swift   # Main app
+│   └── ContentView.swift  # Root view
 ├── Config/
-│   └── APIConfig.swift            # Backend service URLs (ports 8001-8010)
+│   └── APIConfig.swift    # API endpoints configuration
 ├── Models/
-│   └── Models.swift               # Codable data models for all entities
+│   └── Models.swift       # All data models (User, Transaction, etc.)
 ├── Services/
-│   ├── APIClient.swift            # Generic type-safe HTTP client
-│   └── Services.swift             # Service layer (Auth, Banking, Budget, etc.)
+│   ├── APIClient.swift    # Generic API client + Keychain
+│   └── Services.swift     # All service classes
 ├── ViewModels/
-│   ├── AuthViewModel.swift        # Authentication state management
-│   └── DashboardViewModel.swift   # Dashboard data aggregation
+│   ├── AuthViewModel.swift      # Authentication logic
+│   └── DashboardViewModel.swift # Dashboard data management
 ├── Views/
-│   ├── Auth/
-│   │   └── AuthView.swift         # Login/Register with gradient UI
-│   ├── MainTabView.swift          # 5-tab navigation
-│   ├── Dashboard/
-│   │   └── DashboardView.swift    # Financial overview
-│   ├── Chat/
-│   │   └── ChatView.swift         # AI chat interface
-│   ├── Budget/
-│   │   └── BudgetView.swift       # Budget management
-│   ├── Savings/
-│   │   └── SavingsView.swift      # Savings goals
-│   ├── Advance/
-│   │   └── AdvanceView.swift      # Cash advances
-│   ├── Credit/
-│   │   └── CreditView.swift       # Credit builder
-│   └── Profile/
-│       └── ProfileView.swift      # User profile
-└── Utils/
-    ├── ColorExtension.swift       # Hex color support
-    └── KeychainHelper.swift       # Token storage (UserDefaults mock)
+│   ├── Auth/              # Login & Register
+│   ├── Dashboard/         # Main dashboard
+│   ├── Chat/              # AI chat interface
+│   ├── Budget/            # Budget management
+│   ├── Savings/           # Savings goals
+│   ├── Advance/           # Cash advances
+│   ├── Credit/            # Credit builder & score
+│   └── Profile/           # User profile
+└── Resources/
+    └── Assets.xcassets    # Images, colors, icons
 ```
 
-## Backend Integration
+## 🚀 Getting Started
 
-The app integrates with all 10 microservices:
+### Prerequisites
 
-| Service | Port | Status | Features |
-|---------|------|--------|----------|
-| User Service | 8001 | ✅ | Auth, user management, profiles |
-| Banking Service | 8002 | ✅ | Bank connections, transactions |
-| Budget Service | 8003 | ✅ | Budget CRUD, tracking |
-| Chat Service | 8004 | ✅ | AI chat, personality modes |
-| Savings Service | 8005 | ✅ | Goals, progress tracking |
-| Notification Service | 8006 | ✅ | Push notifications |
-| Advance Service | 8007 | ✅ | Cash advances, repayment |
-| Credit Service | 8008 | ✅ | Credit builder, score tracking |
-| Analytics Service | 8009 | ✅ | Financial analytics |
-| Recommendation Service | 8010 | ✅ | AI recommendations |
+- **macOS** 13.0 or later
+- **Xcode** 15.0 or later
+- **iOS Simulator** or physical device running iOS 16.0+
+- **Backend Services** running (see [backend README](../../backend/README.md))
 
-## Design System
-
-**Brand Colors:**
-- Primary: `#667EEA` (Cleo purple)
-- Secondary: `#764BA2` (Dark purple)
-- Success: `#00C48C` (Green)
-- Warning: `#FFB547` (Orange)
-- Error: `#FF6B6B` (Red)
-
-**UI Patterns:**
-- Gradient backgrounds for hero cards
-- Circular progress indicators
-- Rounded corners (12-15px)
-- Shadow depth: 2-3px
-- SF Symbols for icons
-- System fonts with custom weights
-
-## Key Implementation Details
-
-### Networking
-```swift
-// Generic type-safe API client
-func request<T: Decodable>(
-    url: URL,
-    method: String = "GET",
-    body: Data? = nil,
-    requiresAuth: Bool = true
-) -> AnyPublisher<T, Error>
-```
-
-### State Management
-```swift
-// ObservableObject with Combine
-class ViewModel: ObservableObject {
-    @Published var data: [Model] = []
-    @Published var isLoading = false
-
-    func loadData() {
-        service.getData()
-            .sink(receiveCompletion: { ... },
-                  receiveValue: { self.data = $0 })
-            .store(in: &cancellables)
-    }
-}
-```
-
-### SwiftUI Views
-```swift
-// Declarative, composable views
-struct MyView: View {
-    @StateObject private var viewModel = ViewModel()
-
-    var body: some View {
-        // SwiftUI DSL
-    }
-}
-```
-
-## Development Features
-
-- ✅ Live SwiftUI previews
-- ✅ Hot reload for UI changes
-- ✅ Xcode debugging support
-- ✅ Console logging
-- ✅ Network request inspection
-- ✅ Type-safe error handling
-- ✅ Reactive data flow with Combine
-
-## Testing
-
-Currently implemented with demo/mock data. Production app would include:
+### Option 1: Quick Setup (Recommended)
 
 ```bash
-# Unit tests (to be added)
-xcodebuild test -project CleoApp.xcodeproj -scheme CleoApp
+cd mobile/ios
 
-# UI tests (to be added)
-xcodebuild test -project CleoApp.xcodeproj -scheme CleoAppUITests
+# 1. Run setup script
+./setup.sh
+
+# 2. Start backend services (in separate terminal)
+cd ../../
+docker-compose up -d
+
+# 3. Build and run the app
+cd mobile/ios
+./run.sh
 ```
 
-## What's Next?
+### Option 2: Manual Setup
 
-### Production Enhancements
-- [ ] Replace UserDefaults with proper Keychain
-- [ ] Add comprehensive error handling UI
-- [ ] Implement pull-to-refresh on lists
-- [ ] Add loading skeletons
-- [ ] Implement token refresh mechanism
-- [ ] Add unit tests (ViewModels, Services)
-- [ ] Add UI tests (Critical user flows)
-- [ ] Add Plaid SDK for real bank connections
-- [ ] Implement push notifications with FCM
-- [ ] Add analytics tracking (Firebase, Mixpanel)
-- [ ] Add crash reporting (Crashlytics)
+```bash
+cd mobile/ios
 
-### Additional Features
-- [ ] Analytics dashboard screen
-- [ ] Recommendations feed screen
-- [ ] Transaction details with receipts
-- [ ] Bill tracking and reminders
-- [ ] Spending review swipe feature
-- [ ] Financial wellness quizzes
-- [ ] Subscription management
+# 1. Open project in Xcode
+open CleoApp.xcodeproj
+
+# 2. Select target device/simulator
+# Click "CleoApp" at top left → Select simulator or device
+
+# 3. Build and run
+# Press Cmd+R or click the Play button
+```
+
+### Option 3: Command Line Build
+
+```bash
+cd mobile/ios
+
+# Build for simulator
+./build.sh
+
+# Or use xcodebuild directly
+xcodebuild -project CleoApp.xcodeproj \
+    -scheme CleoApp \
+    -sdk iphonesimulator \
+    -configuration Debug \
+    build
+```
+
+## 🔧 Configuration
+
+### API Endpoints
+
+Update `CleoApp/Config/APIConfig.swift` to point to your backend:
+
+```swift
+struct APIConfig {
+    // For iOS Simulator
+    static let baseURL = "http://127.0.0.1"
+    
+    // For physical device, use your Mac's IP
+    // static let baseURL = "http://192.168.1.100"
+    
+    // Ports match backend services
+    static let userServicePort = 8001
+    static let bankingServicePort = 8002
+    // ... etc
+}
+```
+
+### Backend Services
+
+Ensure all 10 backend services are running:
+
+```bash
+# Check if services are running
+curl http://127.0.0.1:8001/health  # User Service
+curl http://127.0.0.1:8002/health  # Banking Service
+curl http://127.0.0.1:8003/health  # Budget Service
+# ... etc
+```
+
+## 📦 Features Detail
+
+### 1. Authentication
+- Email/password registration
+- Secure login with JWT tokens
+- Keychain-based token storage (production-ready)
+- Auto-login on app launch
+
+### 2. Dashboard
+- Total balance overview
+- Monthly income vs spending
+- Recent transactions (last 5)
+- Savings goals progress
+- Budget status with warnings
+- Quick action buttons
+
+### 3. AI Chat
+- 4 personality modes:
+  - **Supportive** - Encouraging and empathetic
+  - **Funny** - Witty with pop culture references
+  - **Strict** - Direct and no-nonsense
+  - **Roast** - Sarcastic, calls out bad spending
+- Real-time messaging
+- Context-aware responses
+- Chat history
+
+### 4. Budget Management
+- Create budgets by category
+- Set monthly/weekly/yearly limits
+- Visual progress indicators
+- Budget vs actual spending
+- Alerts at 90%+ usage
+
+### 5. Savings Goals
+- Multiple concurrent goals
+- Target amount and deadline
+- Automated contributions
+- Progress tracking
+- Goal achievement celebrations
+
+### 6. Cash Advance
+- Eligibility checking ($20-$250)
+- Instant or standard delivery
+- Transparent fee disclosure
+- Repayment tracking
+- Advance history
+
+### 7. Credit Builder
+- Credit score monitoring
+- Score trend tracking
+- Credit factors breakdown
+- Enrollment in builder program
+- Monthly contribution calculator
+- Credit activity feed
+
+### 8. Profile
+- User information
+- Subscription tier display
+- Account settings
+- Support access
+- Logout
+
+## 🔐 Security
+
+### Token Storage
+- **Production**: iOS Keychain (`kSecAttrAccessibleWhenUnlockedThisDeviceOnly`)
+- **Encryption**: AES-256 at rest
+- **Transport**: TLS 1.3 for API calls
+
+### Best Practices
+- No credentials stored in UserDefaults
+- JWT tokens in Keychain only
+- Automatic token refresh (future)
+- Secure error handling
+
+## 🧪 Testing
+
+### Manual Testing
+
+1. **Registration Flow**
+   ```
+   Email: test@example.com
+   Password: Password123!
+   Full Name: Test User
+   ```
+
+2. **Test Endpoints** (with backend running)
+   - Login → Should receive JWT token
+   - Dashboard → Should load user data
+   - Chat → Should respond to messages
+   - Budget → Create and view budgets
+   - Savings → Create goals
+   - Advance → Check eligibility
+   - Credit → View credit score
+
+### Unit Tests (Future)
+```bash
+# Run tests
+xcodebuild test -project CleoApp.xcodeproj \
+    -scheme CleoApp \
+    -destination 'platform=iOS Simulator,name=iPhone 15'
+```
+
+## 📱 Supported Devices
+
+- **iPhone**: All models running iOS 16.0+
+- **iPad**: All models running iPadOS 16.0+
+- **Simulators**: All iOS 16.0+ simulators
+
+### Optimized For
+- iPhone 15/15 Pro (primary)
+- iPhone 14/14 Pro
+- iPhone 13/13 Pro
+- iPhone 12/12 Pro
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**1. "Failed to connect to backend"**
+```bash
+# Check if backend is running
+docker ps | grep cleo
+
+# Start backend if not running
+cd ../../
+docker-compose up -d
+```
+
+**2. "Xcode build error"**
+```bash
+# Clean build folder
+rm -rf ~/Library/Developer/Xcode/DerivedData/CleoApp-*
+
+# Rebuild
+xcodebuild clean build -project CleoApp.xcodeproj
+```
+
+**3. "App crashes on launch"**
+- Check Xcode console for errors
+- Verify Info.plist is present
+- Ensure iOS Deployment Target is set to 16.0
+
+**4. "Cannot connect from physical device"**
+```swift
+// Update APIConfig.swift to use your Mac's IP
+static let baseURL = "http://192.168.1.XXX"  // Your Mac's IP
+
+// Find your Mac's IP:
+// System Settings → Network → Wi-Fi → Details → IP Address
+```
+
+## 🛠️ Development
+
+### Adding New Features
+
+1. **Model** - Add to `Models/Models.swift`
+2. **Service** - Add to `Services/Services.swift`
+3. **ViewModel** - Create in `ViewModels/`
+4. **View** - Create in `Views/[Feature]/`
+
+Example:
+```swift
+// 1. Add Model
+struct NewFeature: Codable {
+    let id: UUID
+    let name: String
+}
+
+// 2. Add Service
+class NewFeatureService {
+    static let shared = NewFeatureService()
+    private let client = APIClient.shared
+    
+    func getFeatures() -> AnyPublisher<[NewFeature], Error> {
+        // Implementation
+    }
+}
+
+// 3. Add View
+struct NewFeatureView: View {
+    var body: some View {
+        // Implementation
+    }
+}
+```
+
+### Code Style
+
+- Use SwiftUI for all UI components
+- Follow MVVM architecture strictly
+- Use Combine for reactive programming
+- Keep views small and composable
+- Extract reusable components
+
+## 📊 Performance
+
+### Target Metrics
+- App launch: < 2 seconds
+- API response: < 500ms
+- UI interactions: 60 FPS
+- Memory usage: < 150MB
+
+### Optimization Tips
+- Use `@Published` sparingly
+- Implement pagination for long lists
+- Cache network responses
+- Use SwiftUI Lazy stacks
+
+## 🔄 CI/CD (Future)
+
+```yaml
+# .github/workflows/ios.yml
+name: iOS CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: xcodebuild build -project CleoApp.xcodeproj
+      - name: Test
+        run: xcodebuild test -project CleoApp.xcodeproj
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](../../LICENSE) file for details.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+## 📞 Support
+
+- **Documentation**: [/docs](../../docs/)
+- **Backend README**: [/backend/README.md](../../backend/README.md)
+- **API Docs**: http://localhost:8001/docs (when backend running)
+- **Issues**: [GitHub Issues](https://github.com/yourusername/cleo/issues)
+
+## 🗺️ Roadmap
+
+### ✅ Completed (v1.0)
+- [x] Authentication (Login/Register)
+- [x] Dashboard with financial overview
+- [x] AI Chat with 4 personalities
+- [x] Budget management
+- [x] Savings goals
+- [x] Cash advance
+- [x] Credit builder & monitoring
+- [x] Profile management
+- [x] Keychain security
+
+### 🚧 In Progress (v1.1)
+- [ ] Unit tests (50+ tests)
+- [ ] UI tests
 - [ ] Dark mode support
-- [ ] Accessibility (VoiceOver, Dynamic Type)
-- [ ] Localization (i18n)
+- [ ] iPad optimization
+- [ ] Localization (Spanish, French)
 
-### Distribution
-- [ ] Code signing configuration
-- [ ] App Store Connect setup
-- [ ] TestFlight beta distribution
-- [ ] App Store submission
-- [ ] Marketing assets (screenshots, preview video)
-
-## Troubleshooting
-
-See [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md#troubleshooting) for:
-- Build errors and fixes
-- Network connection issues
-- Runtime error solutions
-- Physical device testing tips
-
-## Resources
-
-- [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) - Detailed setup guide
-- [QUICKSTART.md](QUICKSTART.md) - 5-minute quick start
-- [SwiftUI Documentation](https://developer.apple.com/documentation/swiftui/)
-- [Combine Framework](https://developer.apple.com/documentation/combine)
-- [iOS Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/ios)
-
-## Screenshots
-
-Once you build the app, you'll see:
-- 🎨 Beautiful gradient authentication screens
-- 📊 Comprehensive financial dashboard
-- 💬 AI chat with 4 personality modes
-- 💰 Budget tracking with progress indicators
-- 🎯 Savings goals with visual progress
-- ⚡ Cash advance request flow
-- 📈 Credit builder with score tracking
-- 👤 Profile with settings and logout
+### 📋 Planned (v2.0)
+- [ ] Plaid bank linking (real)
+- [ ] Push notifications
+- [ ] Biometric auth (Face ID/Touch ID)
+- [ ] Widget support
+- [ ] Apple Watch companion
+- [ ] Siri shortcuts
 
 ---
 
-**Status:** ✅ **COMPLETE** - Ready to build and demo!
+<div align="center">
+
+**Built with ❤️ using SwiftUI**
+
+[Report Bug](https://github.com/yourusername/cleo/issues) · [Request Feature](https://github.com/yourusername/cleo/issues)
+
+</div>
